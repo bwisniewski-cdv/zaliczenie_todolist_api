@@ -3,7 +3,6 @@ const express = require("express");
 const sql = require('mssql');
 const bodyParser = require('body-parser');
 const router = express.Router();
-
 const app = express();
 
 const config = {
@@ -21,6 +20,16 @@ app.use(bodyParser.json());
 sql.connect(config, err => {
     if (err) console.log(err);
     else console.log('Connected to Azure SQL Database');
+});
+
+//Home Page
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/views/index.html');
+});
+
+//Home Page
+app.get('/logowanie', (req, res) => {
+    res.sendFile(__dirname + '/views/logowanie.html');
 });
 
 //SETS
@@ -208,11 +217,11 @@ app.put('/list/:id', (req, res) => {
     if (!req.params.id) {
         return res.status(400).send({ message: 'ID is required' });
     }
-    if (!req.body.description) {
-        return res.status(400).send({ message: 'Description is required' });
-    }
+    // if (!req.body.description) {
+    //     return res.status(400).send({ message: 'Description is required' });
+    // }
     if (!req.body.isDone) {
-        return res.status(400).send({ message: 'Description is required' });
+        return res.status(400).send({ message: 'isDone is required' });
     }
     if (!req.body.id_set) {
         return res.status(400).send({ message: 'Id_set is required' });
@@ -221,7 +230,7 @@ app.put('/list/:id', (req, res) => {
     const request = new sql.Request();
     request.input('id', req.params.id);
     request.input('description', req.body.description);
-    request.input('isDone', req.body.isDone || false);
+    request.input('isDone', req.body.isDone);
     request.input('id_set', req.body.id_set);
     request.query('UPDATE Purchases SET description=@description, isDone=@isDone, id_set=@id_set WHERE id = @id', (err, result) => {
         if (err) {

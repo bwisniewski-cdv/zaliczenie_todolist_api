@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Microsoft Login</title>
+    <style>
+        .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        }
+
+        #login-btn {
+        padding: 10px 20px;
+        background-color: #0078D7;
+        color: white;
+        border: none;
+        font-size: 18px;
+        }
+    </style>
+    <script>
+        const loginBtn = document.getElementById('login-btn');
+
+        loginBtn.addEventListener('click', () => {
+        window.location.href = 'https://bartekcdv.azurewebsites.net/.auth/login/aad';
+        });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <button id="login-btn">Login with Microsoft</button>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>

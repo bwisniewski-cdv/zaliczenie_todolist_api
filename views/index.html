@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ToDoList CRUD</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.6/dist/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.2.1/dist/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+    <style>
+        @media only screen and (max-width: 600px) {
+            body {
+            flex-direction: column;
+            }
+        }
+        body {
+            display: flex;
+            flex-wrap: wrap;
+            background-color: #f2f2f2;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+            margin: 0;
+            padding: 0;
+        }
+
+        a {
+            color: blue;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>  
+    <h1>Sets</h1>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addSetModal">
+        Dodaj zestaw
+      </button>
+      <!-- Modal for creating new sets -->
+      <div class="modal fade" id="addSetModal" tabindex="-1" role="dialog" aria-labelledby="addSetModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="addSetModalLabel">Dodaj nowy zestaw</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form id="addSetForm">
+                <div class="form-group">
+                  <label for="titleInput">Tytuł</label>
+                  <input type="text" class="form-control" id="titleInput" placeholder="Wpisz tytuł">
+                </div>
+              </form>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Zamknij</button>
+              <button type="button" class="btn btn-primary" onclick="addSet()">Dodaj</button>
+            </div>
+          </div>
+        </div>
+      </div>      
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Title</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="sets-table">
+        </tbody>
+    </table>
+    <br>
+    <h1>Purchases</h1>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createPurchaseModal">
+        Dodaj zestaw
+      </button>
+    <!-- Modal for creating new purchase -->
+    <div class="modal fade" id="createPurchaseModal" tabindex="-1" role="dialog" aria-labelledby="createPurchaseModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="createPurchaseModalLabel">New Purchase</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="modal-body">
+            <form id="createPurchaseForm">
+                <div class="form-group">
+                <label for="description">Description</label>
+                <input type="text" class="form-control" id="description" placeholder="Enter description">
+                </div>
+                <label for="isDone">Is done</label>
+                <div class="form-group">
+                <label for="isDone">Is done</label>
+                <input type="checkbox" class="form-control" id="isDone" placeholder="Enter is done">
+                </div>
+                <div class="form-group">
+                <label for="setId">Set Id</label>
+                <input type="text" class="form-control" id="id_set" placeholder="Enter set id">
+                </div>
+            </form>
+            </div>
+            <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" onclick="createPurchase()">Save</button>
+            </div>
+        </div>
+        </div>
+    </div>
+  
+  
+    <table class="table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Description</th>
+            <th>IsDone</th>
+            <th>Set ID</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody id="purchases-table">
+        </tbody>
+    </table>
+    <script>
+    // Function to create new sets
+    function addSet() {
+        var title = document.getElementById("titleInput").value;
+        fetch("https://bartekcdv.azurewebsites.net/sets", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ title: title })
+        })
+            .then(response => response.json())
+            .then(data => {
+                form.reset();
+                $('#addSetModal').modal('hide');
+                location.reload();
+            });
+    }
+
+
+    // Function to display sets
+    function displaySets() {
+      // Clear previous data
+      document.getElementById("sets-table").innerHTML = "";
+      // Fetch data from API
+      fetch("/sets")
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(set => {
+            let row = document.createElement("tr");
+            let idCell = document.createElement("td");
+            idCell.innerHTML = set.id;
+            let titleCell = document.createElement("td");
+            titleCell.innerHTML = set.title;
+            let actionsCell = document.createElement("td");
+            let editButton = document.createElement("button");
+            editButton.innerHTML = "Edit";
+            editButton.setAttribute("class", "btn btn-warning");
+            editButton.onclick = () => {
+                let id = set.id;
+                let newTitle = prompt("Enter the new title:");
+                fetch(`https://bartekcdv.azurewebsites.net/sets/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ title: newTitle })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                    alert("Set updated successfully!");
+                    location.reload();
+                    })
+                    .catch(err => console.log(err));
+            };
+            let deleteButton = document.createElement("button");
+            deleteButton.innerHTML = "Delete";
+            deleteButton.setAttribute("class", "btn btn-danger");
+            deleteButton.onclick = () => {
+                let id = set.id;
+                fetch(`https://bartekcdv.azurewebsites.net/sets/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                    alert("Set deleted successfully!");
+                    location.reload();
+                    })
+                    .catch(err => console.log(err));
+            };
+            actionsCell.appendChild(editButton);
+            actionsCell.appendChild(deleteButton);
+            row.appendChild(idCell);
+            row.appendChild(titleCell);
+            row.appendChild(actionsCell);
+            document.getElementById("sets-table").appendChild(row);
+          });
+        });
+    }
+    //Function to create new Purchases via form
+    function createPurchase() {
+        var description = document.getElementById("description").value;
+        const isDone = document.getElementById("isDone").checked;
+        const id_set = document.getElementById("id_set").value;
+
+        const newPurchase = { description, isDone, id_set };
+        // Fetch data from API
+        fetch("https://bartekcdv.azurewebsites.net/list", {
+            method: "POST",
+            body: JSON.stringify(newPurchase),
+            headers: {
+            "Content-Type": "application/json"
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+            console.log(data);
+            $('#createPurchaseModal').modal('hide');
+            location.reload();
+            });
+    }
+
+    // Function to display list
+    function displayPurchases() {
+      // Clear previous data
+      document.getElementById("purchases-table").innerHTML = "";
+      // Fetch data from API
+      fetch("/list")
+        .then(response => response.json())
+        .then(data => {
+          data.forEach(purchase => {
+            let row = document.createElement("tr");
+            let idCell = document.createElement("td");
+            idCell.innerHTML = purchase.id;
+            let descriptionCell = document.createElement("td");
+            descriptionCell.innerHTML = purchase.description;
+            let isDoneCell = document.createElement("td");
+            isDoneCell.innerHTML = purchase.isDone;
+            let setIdCell = document.createElement("td");
+            setIdCell.innerHTML = purchase.id_set;
+            let actionsCell = document.createElement("td");
+            let editButton = document.createElement("button");
+            editButton.innerHTML = "Edit";
+            editButton.setAttribute("class", "btn btn-warning");
+            editButton.onclick = () => {
+                let id = purchase.id;
+                let newDescription = prompt("Enter the new description:");
+                let newIsDone = prompt("Enter the new isDone status:");
+                let newSetId = prompt("Enter the new setId:");
+                fetch(`https://bartekcdv.azurewebsites.net/list/${id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ description: newDescription, isDone: newIsDone, id_set: newSetId })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                    alert("List updated successfully!");
+                    location.reload();
+                })
+                .catch(err => console.log(err));
+            };
+            let deleteButton = document.createElement("button");
+            deleteButton.innerHTML = "Delete";
+            deleteButton.setAttribute("class", "btn btn-danger");
+            deleteButton.onclick = () => {
+                deleteButton.onclick = () => {
+                let id = purchase.id;
+                fetch(`https://bartekcdv.azurewebsites.net/list/${id}`, {
+                    method: 'DELETE'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                    alert("List deleted successfully!");
+                    location.reload();
+                })
+                .catch(err => console.log(err));
+            };
+            };
+            actionsCell.appendChild(editButton);
+            actionsCell.appendChild(deleteButton);
+            row.appendChild(idCell);
+            row.appendChild(descriptionCell);
+            row.appendChild(isDoneCell);
+            row.appendChild(setIdCell);
+            row.appendChild(actionsCell);
+            document.getElementById("purchases-table").appendChild(row);
+          });
+        });
+    }
+
+    // Call the display functions on page load
+    displaySets();
+    displayPurchases();
+    </script>
+</body>
+</html>
